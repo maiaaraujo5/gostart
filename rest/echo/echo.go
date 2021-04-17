@@ -8,11 +8,11 @@ import (
 )
 
 type echo struct {
-	Config *Config
+	Config *rest.Config
 	Echo   *echoLibrary.Echo
 }
 
-func NewEcho(config *Config) rest.Rest {
+func NewEcho(config *rest.Config) rest.Rest {
 	return &echo{
 		Config: config,
 		Echo:   echoLibrary.New(),

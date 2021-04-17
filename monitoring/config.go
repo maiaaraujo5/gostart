@@ -1,15 +1,17 @@
-package echo
+package monitoring
 
 import "github.com/maiaaraujo5/gostart/config"
 
 type Config struct {
-	Port string
+	Release           string
+	Environment       string
+	AuthenticationKey string
 }
 
 func NewConfig(conf config.Config) (*Config, error) {
 	c := &Config{}
 
-	if err := conf.ReadConfig(c, "echo"); err != nil {
+	if err := conf.ReadConfig(c, "monitoring"); err != nil {
 		return nil, err
 	}
 
