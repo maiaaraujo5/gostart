@@ -1,12 +1,18 @@
 package config
 
-import "github.com/spf13/viper"
+import (
+	"github.com/spf13/viper"
+)
 
-type Config struct {
+type Config interface {
+	ReadConfig(i interface{}, key string) error
+}
+
+type config struct {
 	Viper *viper.Viper
 }
 
-func NewConfig(files ...string) (*Config, error) {
+func NewConfig(files ...string) (Config, error) {
 	v := viper.New()
 	for _, file := range files {
 		v.SetConfigFile(file)
@@ -17,13 +23,13 @@ func NewConfig(files ...string) (*Config, error) {
 		}
 	}
 
-	return &Config{
+	return &config{
 		Viper: v,
 	}, nil
 
 }
 
-func (v *Config) ReadConfig(i interface{}, key string) error {
+func (v *config) ReadConfig(i interface{}, key string) error {
 	err := v.Viper.UnmarshalKey(key, i)
 	if err != nil {
 		return err
