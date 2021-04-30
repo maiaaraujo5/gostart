@@ -1,7 +1,11 @@
 package connection
 
-import "go.mongodb.org/mongo-driver/mongo"
+import (
+	"github.com/go-pg/pg"
+	"go.mongodb.org/mongo-driver/mongo"
+)
 
 type Connection struct {
-	MongoDB *mongo.Client
+	MongoDB  *mongo.Client
+	Postgres *pg.DB
 }

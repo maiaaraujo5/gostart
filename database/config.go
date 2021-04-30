@@ -7,9 +7,11 @@ import (
 
 type Config struct {
 	Url               string
+	User              string
 	Password          string
 	DatabaseName      string
 	URI               string
+	PoolSize          int
 	ConnectionTimeout time.Duration
 }
 
