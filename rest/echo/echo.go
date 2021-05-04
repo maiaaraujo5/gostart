@@ -12,10 +12,10 @@ type echo struct {
 	Echo   *echoLibrary.Echo
 }
 
-func NewEcho(config *rest.Config) rest.Rest {
+func NewEcho(config *rest.Config, client *echoLibrary.Echo) rest.Rest {
 	return &echo{
 		Config: config,
-		Echo:   echoLibrary.New(),
+		Echo:   client,
 	}
 }
 

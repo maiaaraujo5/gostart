@@ -2,6 +2,8 @@ package config
 
 import (
 	"github.com/spf13/viper"
+	"os"
+	"strings"
 )
 
 type Config interface {
@@ -12,8 +14,11 @@ type config struct {
 	Viper *viper.Viper
 }
 
-func NewConfig(files ...string) (Config, error) {
+func NewConfig() (Config, error) {
 	v := viper.New()
+	conf := os.Getenv("CONF")
+	files := strings.Split(conf, ",")
+
 	for _, file := range files {
 		v.SetConfigFile(file)
 

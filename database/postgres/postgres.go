@@ -31,9 +31,9 @@ func (p postgres) GetConnection(ctx context.Context) *connection.Connection {
 }
 
 func (p postgres) Ping(ctx context.Context) error {
-	p.client.Ping
+	panic("implement me")
 }
 
 func (p postgres) Disconnect(ctx context.Context) error {
-	panic("implement me")
+	return p.client.Close()
 }
