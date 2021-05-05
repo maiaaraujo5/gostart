@@ -2,8 +2,8 @@ package application
 
 import (
 	"github.com/lann/builder"
-	"github.com/maiaaraujo5/gostart/config"
 	mongo "github.com/maiaaraujo5/gostart/database/mongodb/fx"
+	postgres "github.com/maiaaraujo5/gostart/database/postgres/fx"
 	sentry "github.com/maiaaraujo5/gostart/monitoring/sentry/fx"
 	echo "github.com/maiaaraujo5/gostart/rest/echo/fx"
 	"go.uber.org/fx"
@@ -27,8 +27,8 @@ func (b providersBuilder) WithSentry() providersBuilder {
 	return builder.Append(b, "Providers", sentry.SentryModule()).(providersBuilder)
 }
 
-func (b providersBuilder) WithConfig() providersBuilder {
-	return builder.Append(b, "Providers", config.NewConfig()).(providersBuilder)
+func (b providersBuilder) WithPostgres() providersBuilder {
+	return builder.Append(b, "Providers", postgres.PostgresModule()).(providersBuilder)
 }
 
 func (b providersBuilder) Build() Options {

@@ -9,11 +9,11 @@ import (
 )
 
 func Run(options Options) error {
-	fx.New(options.Providers...)
 	return fx.New(
+		fx.Options(options.Providers...),
 		fx.Provide(
-			context.Background,
 			config.NewConfig,
+			context.Background,
 		),
 		fx.Invoke(start),
 	).Start(context.Background())
