@@ -31,6 +31,10 @@ func (b providersBuilder) WithPostgres() providersBuilder {
 	return builder.Append(b, "Providers", postgres.PostgresModule()).(providersBuilder)
 }
 
+func (b providersBuilder) WithCustomProvider(provider fx.Option) providersBuilder {
+	return builder.Append(b, "Providers", provider).(providersBuilder)
+}
+
 func (b providersBuilder) Build() Options {
 	return builder.GetStruct(b).(Options)
 }
