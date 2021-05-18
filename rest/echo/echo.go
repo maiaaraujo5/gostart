@@ -2,9 +2,11 @@ package echo
 
 import (
 	echoLibrary "github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/maiaaraujo5/gostart/rest"
 	"github.com/maiaaraujo5/gostart/rest/handler"
 	"log"
+	"net/http"
 )
 
 type echo struct {
@@ -13,6 +15,19 @@ type echo struct {
 }
 
 func NewEcho(config *rest.Config, client *echoLibrary.Echo) rest.Rest {
+
+	if config.Cors {
+		if len(config.AllowOrigins) > 0 {
+			client.Use(middleware.CORSWithConfig(middleware.DefaultCORSConfig))
+		} else {
+			client.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+				AllowOrigins: config.AllowOrigins,
+				AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
+			}))
+		}
+
+	}
+
 	return &echo{
 		Config: config,
 		Echo:   client,
