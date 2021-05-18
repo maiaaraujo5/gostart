@@ -17,7 +17,7 @@ type echo struct {
 func NewEcho(config *rest.Config, client *echoLibrary.Echo) rest.Rest {
 
 	if config.Cors {
-		if len(config.AllowOrigins) > 0 {
+		if len(config.AllowOrigins) == 0 {
 			client.Use(middleware.CORSWithConfig(middleware.DefaultCORSConfig))
 		} else {
 			client.Use(middleware.CORSWithConfig(middleware.CORSConfig{
