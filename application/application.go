@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/labstack/gommon/log"
 	"github.com/maiaaraujo5/gostart/config"
-	rest2 "github.com/maiaaraujo5/gostart/rest"
 	"go.uber.org/fx"
 )
 
@@ -19,12 +18,20 @@ func Run(options Options) error {
 	).Start(context.Background())
 }
 
-func start(lifecycle fx.Lifecycle, e rest2.Rest) {
+func start(lifecycle fx.Lifecycle, params Params) {
 	lifecycle.Append(
 		fx.Hook{
 			OnStart: func(ctx context.Context) error {
 				log.Infof("starting...")
-				e.Start()
+
+				if params.Broker != nil {
+					go params.Broker.Listen(ctx, params.BrokerHandler)
+				}
+
+				if params.Rest != nil {
+					params.Rest.Start()
+				}
+
 				return nil
 			},
 			OnStop: func(ctx context.Context) error {

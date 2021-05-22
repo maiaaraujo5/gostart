@@ -2,6 +2,7 @@ package application
 
 import (
 	"github.com/lann/builder"
+	rabbitmq "github.com/maiaaraujo5/gostart/broker/rabbitmq/fx"
 	mongo "github.com/maiaaraujo5/gostart/database/mongodb/fx"
 	postgres "github.com/maiaaraujo5/gostart/database/postgres/fx"
 	sentry "github.com/maiaaraujo5/gostart/monitoring/sentry/fx"
@@ -29,6 +30,10 @@ func (b providersBuilder) WithSentry() providersBuilder {
 
 func (b providersBuilder) WithPostgres() providersBuilder {
 	return builder.Append(b, "Providers", postgres.PostgresModule()).(providersBuilder)
+}
+
+func (b providersBuilder) WithRabbitMQ() providersBuilder {
+	return builder.Append(b, "Providers", rabbitmq.RabbitMQModule()).(providersBuilder)
 }
 
 func (b providersBuilder) WithCustomProvider(provider fx.Option) providersBuilder {
