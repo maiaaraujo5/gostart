@@ -1,8 +1,6 @@
 package broker
 
-import "context"
-
 type Broker interface {
-	SendMessage(ctx context.Context, message interface{}) error
+	SendMessage(exchange, routingKey string, mandatory, immediate bool, message interface{}) error
 	Subscribe(queue string, listener Listener)
 }

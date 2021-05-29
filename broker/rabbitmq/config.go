@@ -7,17 +7,7 @@ const (
 )
 
 type Config struct {
-	URL      string
-	Sender   []configs
-	Listener configs
-}
-
-type configs struct {
-	Exchange   string
-	Queue      string
-	RoutingKey string
-	Mandatory  bool
-	Immediate  bool
+	URL string
 }
 
 func defaultConfig() {

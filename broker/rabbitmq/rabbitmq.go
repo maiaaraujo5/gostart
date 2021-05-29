@@ -1,7 +1,6 @@
 package rabbitmq
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/maiaaraujo5/gostart/broker"
 	"github.com/streadway/amqp"
@@ -30,7 +29,7 @@ func Connect() (broker.Broker, error) {
 	}, nil
 }
 
-func (r *rabbitMQ) SendMessage(ctx context.Context, message interface{}) error {
+func (r *rabbitMQ) SendMessage(exchange, routingKey string, mandatory, immediate bool, message interface{}) error {
 	channel, err := r.connection.Channel()
 	if err != nil {
 		return err
@@ -41,21 +40,15 @@ func (r *rabbitMQ) SendMessage(ctx context.Context, message interface{}) error {
 		return err
 	}
 
-	for _, c := range r.config.Sender {
-		err = channel.Publish(
-			c.Exchange,
-			c.RoutingKey,
-			c.Mandatory,
-			c.Immediate,
-			amqp.Publishing{
-				ContentType: "text/plain",
-				Body:        body,
-			})
-
-		if err != nil {
-			return err
-		}
-	}
+	err = channel.Publish(
+		exchange,
+		routingKey,
+		mandatory,
+		immediate,
+		amqp.Publishing{
+			ContentType: "text/plain",
+			Body:        body,
+		})
 
 	return nil
 }
