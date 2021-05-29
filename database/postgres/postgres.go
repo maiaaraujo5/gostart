@@ -11,11 +11,17 @@ type postgres struct {
 	client *pg.DB
 }
 
-func Connect(config *database.Config) (database.Database, error) {
+func Connect() (database.Database, error) {
+
+	config, err := NewConfig()
+	if err != nil {
+		return nil, err
+	}
+
 	client := pg.Connect(&pg.Options{
 		User:     config.User,
 		Password: config.Password,
-		Addr:     config.Url,
+		Addr:     config.Addr,
 		PoolSize: config.PoolSize,
 	}).WithTimeout(config.ConnectionTimeout)
 

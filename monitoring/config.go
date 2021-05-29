@@ -2,16 +2,18 @@ package monitoring
 
 import "github.com/maiaaraujo5/gostart/config"
 
+const root = "gostart.monitoring"
+
 type Config struct {
 	Release           string
 	Environment       string
 	AuthenticationKey string
 }
 
-func NewConfig(conf config.Config) (*Config, error) {
+func NewConfig() (*Config, error) {
 	c := &Config{}
 
-	if err := conf.ReadConfig(c, "monitoring"); err != nil {
+	if err := config.ReadConfigPath(c, root); err != nil {
 		return nil, err
 	}
 

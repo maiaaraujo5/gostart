@@ -14,7 +14,11 @@ type echo struct {
 	Echo   *echoLibrary.Echo
 }
 
-func NewEcho(config *rest.Config, client *echoLibrary.Echo) rest.Rest {
+func NewEcho(client *echoLibrary.Echo) rest.Rest {
+	config, err := rest.NewConfig()
+	if err != nil {
+		return nil
+	}
 
 	if config.Cors {
 		if len(config.AllowOrigins) == 0 {

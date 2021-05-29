@@ -8,10 +8,11 @@ import (
 )
 
 func Run(options Options) error {
+	config.Load()
+
 	return fx.New(
 		fx.Options(options.Providers...),
 		fx.Provide(
-			config.NewConfig,
 			context.Background,
 		),
 		fx.Invoke(start),

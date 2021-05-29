@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/maiaaraujo5/gostart/broker"
-	"github.com/maiaaraujo5/gostart/config"
 	"github.com/streadway/amqp"
 	"log"
 )
@@ -14,8 +13,8 @@ type rabbitMQ struct {
 	config     *Config
 }
 
-func Connect(config config.Config) (broker.Broker, error) {
-	c, err := NewConfig(config)
+func Connect() (broker.Broker, error) {
+	c, err := NewConfig()
 	if err != nil {
 		return nil, err
 	}

@@ -3,7 +3,7 @@ package rabbitmq
 import "github.com/maiaaraujo5/gostart/config"
 
 const (
-	brokerConfig = "gostart.rabbitmq"
+	root = "gostart.rabbitmq"
 )
 
 type Config struct {
@@ -20,10 +20,14 @@ type configs struct {
 	Immediate  bool
 }
 
-func NewConfig(config config.Config) (*Config, error) {
+func defaultConfig() {
+	config.AddDefault(root+".url", "amqps://localhost:5672/temp")
+}
+
+func NewConfig() (*Config, error) {
 	c := &Config{}
 
-	err := config.ReadConfig(&c, brokerConfig)
+	err := config.ReadConfigPath(&c, root)
 	if err != nil {
 		return nil, err
 	}

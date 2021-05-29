@@ -2,43 +2,48 @@ package config
 
 import (
 	"github.com/spf13/viper"
+	"log"
 	"os"
 	"strings"
+	"sync"
 )
 
-type Config interface {
-	ReadConfig(i interface{}, key string) error
-}
+var instance *viper.Viper
+var once sync.Once
 
-type config struct {
-	Viper *viper.Viper
-}
+func Load() *viper.Viper {
+	once.Do(func() {
+		v := viper.New()
+		conf := os.Getenv("CONF")
+		files := strings.Split(conf, ",")
 
-func NewConfig() (Config, error) {
-	v := viper.New()
-	conf := os.Getenv("CONF")
-	files := strings.Split(conf, ",")
-
-	for _, file := range files {
-		v.SetConfigFile(file)
-
-		err := v.MergeInConfig()
-		if err != nil {
-			return nil, err
+		for _, file := range files {
+			if file == "" {
+				continue
+			}
+			v.SetConfigFile(file)
+			if err := v.MergeInConfig(); err != nil {
+				log.Fatalf("error to load configs: %s", err)
+			}
 		}
-	}
 
-	return &config{
-		Viper: v,
-	}, nil
+		instance = v
+	})
 
+	return instance
 }
 
-func (v *config) ReadConfig(i interface{}, key string) error {
-	err := v.Viper.UnmarshalKey(key, i)
+func ReadConfigPath(i interface{}, key string) error {
+	instance = Load()
+	err := instance.UnmarshalKey(key, i)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func AddDefault(path string, value interface{}) {
+	instance = Load()
+	instance.SetDefault(path, value)
 }
