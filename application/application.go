@@ -3,6 +3,7 @@ package application
 import (
 	"context"
 	"github.com/labstack/gommon/log"
+	"github.com/maiaaraujo5/gostart/broker"
 	"github.com/maiaaraujo5/gostart/config"
 	"go.uber.org/fx"
 )
@@ -26,7 +27,9 @@ func start(lifecycle fx.Lifecycle, params Params) {
 				log.Infof("starting...")
 
 				if params.Broker != nil {
-					go params.Broker.Listen(ctx, params.BrokerHandler)
+					for queue, handler := range broker.GetListeners() {
+						go params.Broker.Subscribe(queue, handler)
+					}
 				}
 
 				if params.Rest != nil {

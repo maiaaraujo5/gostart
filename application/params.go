@@ -9,7 +9,6 @@ import (
 type Params struct {
 	fx.In
 
-	Rest          rest.Rest      `optional:"true"`
-	Broker        broker.Broker  `optional:"true"`
-	BrokerHandler broker.Handler `optional:"true"`
+	Rest   rest.Rest     `optional:"true"`
+	Broker broker.Broker `optional:"true"`
 }

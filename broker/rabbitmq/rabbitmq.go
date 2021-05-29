@@ -60,24 +60,24 @@ func (r *rabbitMQ) SendMessage(ctx context.Context, message interface{}) error {
 	return nil
 }
 
-func (r *rabbitMQ) Listen(ctx context.Context, handler broker.Handler) {
+func (r *rabbitMQ) Subscribe(queue string, listener broker.Listener) {
 	channel, err := r.connection.Channel()
 	if err != nil {
 		log.Println("error to connect in channel")
 		return
 	}
 
-	messages, err := channel.Consume(r.config.Listener.Queue, "", true, false, false, false, nil)
+	messages, err := channel.Consume(queue, "", true, false, false, false, nil)
 	if err != nil {
-		log.Println("error to consume message from queue")
+		log.Printf("error to consume messages from queue [%s]. error: %s", queue, err)
 		return
 	}
 
 	forever := make(chan bool)
-
+	log.Printf("listening queue %s from rabbitmq", queue)
 	go func() {
 		for message := range messages {
-			err := handler.Handle(message.Body)
+			err := listener(message.Body)
 			if err != nil {
 				log.Println(err)
 			}
