@@ -4,10 +4,10 @@ import (
 	"context"
 	"github.com/maiaaraujo5/gostart/database"
 	"github.com/maiaaraujo5/gostart/database/connection"
+	"github.com/maiaaraujo5/gostart/log/logger"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
-	"log"
 )
 
 type mongodb struct {
@@ -31,8 +31,7 @@ func Connect() (database.Database, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	log.Printf("connect successfully in mongodb")
+	logger.Info("connect successfully in mongodb")
 	return mongodb{
 		client: client,
 	}, nil

@@ -10,6 +10,7 @@ require (
 	github.com/labstack/gommon v0.3.0
 	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0
 	github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0 // indirect
+	github.com/rs/zerolog v1.22.0
 	github.com/spf13/viper v1.7.1
 	github.com/streadway/amqp v1.0.0
 	go.mongodb.org/mongo-driver v1.5.1

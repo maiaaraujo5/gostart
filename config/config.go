@@ -47,3 +47,8 @@ func AddDefault(path string, value interface{}) {
 	instance = Load()
 	instance.SetDefault(path, value)
 }
+
+func GetStringValue(key string) string {
+	instance = Load()
+	return instance.GetString(key)
+}

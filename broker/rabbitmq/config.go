@@ -15,6 +15,7 @@ func defaultConfig() {
 }
 
 func NewConfig() (*Config, error) {
+	defaultConfig()
 	c := &Config{}
 
 	err := config.ReadConfigPath(&c, root)

@@ -2,15 +2,15 @@ package application
 
 import (
 	"context"
-	"github.com/labstack/gommon/log"
 	"github.com/maiaaraujo5/gostart/broker"
 	"github.com/maiaaraujo5/gostart/config"
+	"github.com/maiaaraujo5/gostart/log/instance"
 	"go.uber.org/fx"
 )
 
 func Run(options Options) error {
 	config.Load()
-
+	instance.Load()
 	return fx.New(
 		fx.Options(options.Providers...),
 		fx.Provide(
@@ -24,8 +24,6 @@ func start(lifecycle fx.Lifecycle, params Params) {
 	lifecycle.Append(
 		fx.Hook{
 			OnStart: func(ctx context.Context) error {
-				log.Infof("starting...")
-
 				if params.Broker != nil {
 					for queue, handler := range broker.GetListeners() {
 						go params.Broker.Subscribe(queue, handler)
@@ -39,7 +37,6 @@ func start(lifecycle fx.Lifecycle, params Params) {
 				return nil
 			},
 			OnStop: func(ctx context.Context) error {
-				log.Infof("stopping...")
 				return nil
 			},
 		},
