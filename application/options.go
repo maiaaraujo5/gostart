@@ -7,6 +7,7 @@ import (
 	postgres "github.com/maiaaraujo5/gostart/database/postgres/fx"
 	sentry "github.com/maiaaraujo5/gostart/monitoring/sentry/fx"
 	echo "github.com/maiaaraujo5/gostart/rest/echo/fx"
+	firebase "github.com/maiaaraujo5/gostart/storage/firebase/fx"
 	"go.uber.org/fx"
 )
 
@@ -34,6 +35,10 @@ func (b providersBuilder) WithPostgres() providersBuilder {
 
 func (b providersBuilder) WithRabbitMQ() providersBuilder {
 	return builder.Append(b, "Providers", rabbitmq.RabbitMQModule()).(providersBuilder)
+}
+
+func (b providersBuilder) WithFirebaseStorage() providersBuilder {
+	return builder.Append(b, "Providers", firebase.FirebaseStorageModule()).(providersBuilder)
 }
 
 func (b providersBuilder) WithCustomProvider(provider fx.Option) providersBuilder {

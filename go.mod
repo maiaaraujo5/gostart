@@ -3,8 +3,12 @@ module github.com/maiaaraujo5/gostart
 go 1.14
 
 require (
+	cloud.google.com/go/storage v1.10.0
+	firebase.google.com/go v3.13.0+incompatible // indirect
+	firebase.google.com/go/v4 v4.6.0
 	github.com/getsentry/sentry-go v0.10.0
 	github.com/go-pg/pg v8.0.7+incompatible
+	github.com/google/uuid v1.2.0
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/labstack/echo/v4 v4.2.2
 	github.com/labstack/gommon v0.3.0
@@ -15,5 +19,6 @@ require (
 	github.com/streadway/amqp v1.0.0
 	go.mongodb.org/mongo-driver v1.5.1
 	go.uber.org/fx v1.13.1
+	google.golang.org/api v0.40.0
 	mellium.im/sasl v0.2.1 // indirect
 )
