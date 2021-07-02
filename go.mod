@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/storage v1.10.0
 	firebase.google.com/go v3.13.0+incompatible // indirect
 	firebase.google.com/go/v4 v4.6.0
-	github.com/getsentry/sentry-go v0.10.0
+	github.com/getsentry/sentry-go v0.11.0
 	github.com/go-pg/pg v8.0.7+incompatible
 	github.com/google/uuid v1.2.0
 	github.com/jinzhu/inflection v1.0.0 // indirect

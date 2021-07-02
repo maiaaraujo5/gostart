@@ -2,25 +2,27 @@ package sentry
 
 import (
 	"github.com/getsentry/sentry-go"
+	"github.com/maiaaraujo5/gostart/log/logger"
 	"github.com/maiaaraujo5/gostart/monitoring"
 )
 
-type Sentry struct {
-	Sentry *sentry.Client
-}
+func Init() error {
+	config, err := monitoring.NewConfig()
+	if err != nil {
+		return err
+	}
 
-func NewSentry(config *monitoring.Config) (*Sentry, error) {
-	client, err := sentry.NewClient(sentry.ClientOptions{
-		Dsn:         config.AuthenticationKey,
-		Release:     config.Release,
-		Environment: config.Environment,
+	err = sentry.Init(sentry.ClientOptions{
+		Dsn:              config.AuthenticationKey,
+		AttachStacktrace: true,
+		TracesSampleRate: 0.2,
+		Release:          config.Release,
+		Environment:      config.Environment,
 	})
 
 	if err != nil {
-		return nil, err
+		return err
 	}
-
-	return &Sentry{
-		Sentry: client,
-	}, nil
+	logger.Info("sentry successfully configured")
+	return nil
 }

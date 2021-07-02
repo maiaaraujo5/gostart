@@ -10,7 +10,7 @@ func SentryModule() fx.Option {
 	return fx.Options(
 		fx.Provide(
 			monitoring.NewConfig,
-			sentry.NewSentry,
+			sentry.Init,
 		),
 	)
 }

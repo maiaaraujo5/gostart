@@ -3,19 +3,21 @@ package echo
 import (
 	echoLibrary "github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	echo2 "github.com/maiaaraujo5/gostart/monitoring/sentry/echo"
 	"github.com/maiaaraujo5/gostart/rest"
+	"github.com/maiaaraujo5/gostart/rest/echo/config"
 	"github.com/maiaaraujo5/gostart/rest/handler"
 	"log"
 	"net/http"
 )
 
 type echo struct {
-	Config *rest.Config
+	Config *config.Config
 	Echo   *echoLibrary.Echo
 }
 
 func NewEcho(client *echoLibrary.Echo) rest.Rest {
-	config, err := rest.NewConfig()
+	config, err := config.NewConfig()
 	if err != nil {
 		return nil
 	}
@@ -30,6 +32,10 @@ func NewEcho(client *echoLibrary.Echo) rest.Rest {
 			}))
 		}
 
+	}
+
+	if config.Sentry {
+		client.Use(echo2.Middleware())
 	}
 
 	return &echo{
