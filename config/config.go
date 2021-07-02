@@ -52,3 +52,8 @@ func GetStringValue(key string) string {
 	instance = Load()
 	return instance.GetString(key)
 }
+
+func GetBoolValue(key string) bool {
+	instance = Load()
+	return instance.GetBool(key)
+}

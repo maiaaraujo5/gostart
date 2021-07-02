@@ -1,6 +1,9 @@
 package handler
 
-import echoLibrary "github.com/labstack/echo/v4"
+import (
+	echoLibrary "github.com/labstack/echo/v4"
+	"github.com/maiaaraujo5/gostart/rest/handler/wrapper"
+)
 
 type Handler struct {
 	Echo Echo
@@ -11,10 +14,10 @@ type Echo struct {
 	Middleware []echoLibrary.MiddlewareFunc
 }
 
-func CreateForEcho(h echoLibrary.HandlerFunc, middlewares ...echoLibrary.MiddlewareFunc) *Handler {
+func CreateForEcho(h wrapper.Handler, middlewares ...echoLibrary.MiddlewareFunc) *Handler {
 	return &Handler{
 		Echo: Echo{
-			Handler:    h,
+			Handler:    wrapper.Handle(h),
 			Middleware: middlewares,
 		},
 	}
