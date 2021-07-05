@@ -1,8 +1,14 @@
 package rabbitmq
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
+	sentry2 "github.com/getsentry/sentry-go"
+	"github.com/google/uuid"
 	"github.com/maiaaraujo5/gostart/broker"
+	"github.com/maiaaraujo5/gostart/log/logger"
+	"github.com/maiaaraujo5/gostart/monitoring/sentry"
 	"github.com/streadway/amqp"
 	"log"
 )
@@ -21,6 +27,13 @@ func Connect() (broker.Broker, error) {
 	connection, err := amqp.Dial(c.URL)
 	if err != nil {
 		return nil, err
+	}
+
+	if c.Sentry {
+		err := sentry.Init()
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &rabbitMQ{
@@ -56,13 +69,13 @@ func (r *rabbitMQ) SendMessage(exchange, routingKey string, mandatory, immediate
 func (r *rabbitMQ) Subscribe(queue string, listener broker.Listener) {
 	channel, err := r.connection.Channel()
 	if err != nil {
-		log.Println("error to connect in channel")
+		logger.Error("error to connect in channel")
 		return
 	}
 
-	messages, err := channel.Consume(queue, "", true, false, false, false, nil)
+	messages, err := channel.Consume(queue, "", false, false, false, false, nil)
 	if err != nil {
-		log.Printf("error to consume messages from queue [%s]. error: %s", queue, err)
+		logger.Error(fmt.Sprintf("error to consume messages from queue [%s]. error: %s", queue, err))
 		return
 	}
 
@@ -70,12 +83,31 @@ func (r *rabbitMQ) Subscribe(queue string, listener broker.Listener) {
 	log.Printf("listening queue %s from rabbitmq", queue)
 	go func() {
 		for message := range messages {
-			err := listener(message.Body)
-			if err != nil {
-				log.Println(err)
-			}
+			span := sentry2.StartSpan(context.Background(), "rabbitmq_consume", sentry2.TransactionName(uuid.NewString()))
+			r.handleMessage(listener, message)
+			span.Finish()
 		}
 	}()
 
 	<-forever
+}
+
+func (r *rabbitMQ) notifyError(err error) {
+	logger.Error(err.Error())
+	sentry2.CaptureException(err)
+}
+
+func (r *rabbitMQ) handleMessage(listener broker.Listener, message amqp.Delivery) {
+	err := listener(message.Body)
+	if err != nil {
+		r.notifyError(err)
+		if err := message.Nack(false, true); err != nil {
+			r.notifyError(err)
+		}
+	}
+	err = message.Ack(true)
+	if err != nil {
+		logger.Error(err.Error())
+		sentry2.CaptureException(err)
+	}
 }

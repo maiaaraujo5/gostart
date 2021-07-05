@@ -7,11 +7,13 @@ const (
 )
 
 type Config struct {
-	URL string
+	URL    string
+	Sentry bool
 }
 
 func defaultConfig() {
 	config.AddDefault(root+".url", "amqps://localhost:5672/temp")
+	config.AddDefault(root+".sentry", false)
 }
 
 func NewConfig() (*Config, error) {
