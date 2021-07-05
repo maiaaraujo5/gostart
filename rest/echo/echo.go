@@ -3,7 +3,7 @@ package echo
 import (
 	echoLibrary "github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	sentry "github.com/maiaaraujo5/gostart/monitoring/echo"
+	echo2 "github.com/maiaaraujo5/gostart/monitoring/sentry/echo"
 	"github.com/maiaaraujo5/gostart/rest"
 	"github.com/maiaaraujo5/gostart/rest/echo/config"
 	"github.com/maiaaraujo5/gostart/rest/handler"
@@ -35,7 +35,7 @@ func NewEcho(client *echoLibrary.Echo) rest.Rest {
 	}
 
 	if config.Sentry {
-		client.Use(sentry.Middleware())
+		client.Use(echo2.Middleware())
 	}
 
 	return &echo{

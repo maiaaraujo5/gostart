@@ -15,7 +15,7 @@ func Init() error {
 	err = sentry.Init(sentry.ClientOptions{
 		Dsn:              config.AuthenticationKey,
 		AttachStacktrace: true,
-		TracesSampleRate: 1,
+		TracesSampleRate: 0.2,
 		Release:          config.Release,
 		Environment:      config.Environment,
 	})
