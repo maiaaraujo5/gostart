@@ -66,11 +66,16 @@ func (r *rabbitMQ) SendMessage(exchange, routingKey string, mandatory, immediate
 	return nil
 }
 
-func (r *rabbitMQ) Subscribe(queue string, listener broker.Listener) {
+func (r *rabbitMQ) Subscribe(queue, exchange string, listener broker.Listener) {
 	channel, err := r.connection.Channel()
 	if err != nil {
 		logger.Error("error to connect in channel")
 		return
+	}
+
+	err = r.declareQueue(queue, exchange, channel)
+	if err != nil {
+		logger.Error(fmt.Sprintf("error to declare queue [%s]. error: %s", queue, err))
 	}
 
 	messages, err := channel.Consume(queue, "", false, false, false, false, nil)
@@ -90,6 +95,30 @@ func (r *rabbitMQ) Subscribe(queue string, listener broker.Listener) {
 	}()
 
 	<-forever
+}
+
+func (r *rabbitMQ) declareQueue(queueName, exchangeName string, channel *amqp.Channel) error {
+	queue, err := channel.QueueDeclare(queueName, true, false, false, false, nil)
+	if err != nil {
+		return err
+	}
+
+	if exchangeName != "" {
+		err := r.bindQueueInExchange(queue.Name, exchangeName, channel)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (r *rabbitMQ) bindQueueInExchange(queueName, exchangeName string, channel *amqp.Channel) error {
+	err := channel.QueueBind(queueName, "", exchangeName, false, nil)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (r *rabbitMQ) notifyError(err error) {

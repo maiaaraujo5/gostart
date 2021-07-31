@@ -25,8 +25,8 @@ func start(lifecycle fx.Lifecycle, params Params) {
 		fx.Hook{
 			OnStart: func(ctx context.Context) error {
 				if params.Broker != nil {
-					for queue, handler := range broker.GetListeners() {
-						go params.Broker.Subscribe(queue, handler)
+					for queue, options := range broker.GetListeners() {
+						go params.Broker.Subscribe(queue, options.Exchange, options.Handler)
 					}
 				}
 

@@ -4,12 +4,20 @@ type (
 	Listener func([]byte) error
 )
 
-var Listeners = make(map[string]Listener)
-
-func RegisterListener(queue string, handler Listener) {
-	Listeners[queue] = handler
+type Options struct {
+	Handler  Listener
+	Exchange string
 }
 
-func GetListeners() map[string]Listener {
+var Listeners = make(map[string]Options)
+
+func RegisterListener(queue, exchange string, handler Listener) {
+	Listeners[queue] = Options{
+		Handler:  handler,
+		Exchange: exchange,
+	}
+}
+
+func GetListeners() map[string]Options {
 	return Listeners
 }
