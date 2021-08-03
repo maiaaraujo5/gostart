@@ -14,6 +14,9 @@ var once sync.Once
 func Load() *viper.Viper {
 	once.Do(func() {
 		v := viper.New()
+		v.AutomaticEnv()
+		v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
 		conf := os.Getenv("CONF")
 		files := strings.Split(conf, ",")
 

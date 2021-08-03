@@ -4,13 +4,13 @@ import (
 	"context"
 	"github.com/maiaaraujo5/gostart/broker"
 	"github.com/maiaaraujo5/gostart/config"
-	"github.com/maiaaraujo5/gostart/log/instance"
+	logger "github.com/maiaaraujo5/gostart/log/instance"
 	"go.uber.org/fx"
 )
 
 func Run(options Options) error {
 	config.Load()
-	instance.Load()
+	logger.Load()
 	return fx.New(
 		fx.Options(options.Providers...),
 		fx.Provide(

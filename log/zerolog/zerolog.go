@@ -2,10 +2,12 @@ package zerolog
 
 import (
 	"context"
+	appconfig "github.com/maiaaraujo5/gostart/application/config"
 	"github.com/maiaaraujo5/gostart/log"
 	"github.com/rs/zerolog"
 	zlog "github.com/rs/zerolog/log"
 	"os"
+	"strings"
 )
 
 type zeroLog struct {
@@ -13,8 +15,22 @@ type zeroLog struct {
 }
 
 func NewZeroLog() log.Log {
+	config, err := newConfig()
+	if err != nil {
+		return nil
+	}
+
+	level, err := zerolog.ParseLevel(strings.ToLower(config.Level))
+	if err != nil {
+		return nil
+	}
 	return &zeroLog{
-		logger: zerolog.New(os.Stdout).With().Timestamp().Logger(),
+		logger: zerolog.New(os.Stdout).
+			Level(level).
+			With().
+			Fields(appconfig.DefaultAppFields()).
+			Timestamp().
+			Logger(),
 	}
 }
 
