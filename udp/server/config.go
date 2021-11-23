@@ -1,19 +1,17 @@
-package redis
+package server
 
 import "github.com/maiaaraujo5/gostart/config"
 
-const root = "gostart.redis"
+const root = "gostart.udp.server"
 
 type Config struct {
-	Addr     string
-	Password string
-	DB       int
+	IP   string
+	Port int
 }
 
 func defaultConfig() {
-	config.AddDefault(root+".addr", "localhost:6379")
-	config.AddDefault(root+".password", "")
-	config.AddDefault(root+".db", 0)
+	config.AddDefault(root+".ip", "0.0.0.0")
+	config.AddDefault(root+".port", "3000")
 }
 
 func NewConfig() (*Config, error) {
