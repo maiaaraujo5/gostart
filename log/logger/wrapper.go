@@ -45,3 +45,8 @@ func Debug(msg string) {
 	i := instance.Load()
 	i.Debug(msg)
 }
+
+func Trace(msg string) {
+	i := instance.Load()
+	i.Trace(msg)
+}

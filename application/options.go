@@ -3,11 +3,13 @@ package application
 import (
 	"github.com/lann/builder"
 	rabbitmq "github.com/maiaaraujo5/gostart/broker/rabbitmq/fx"
+	fx2 "github.com/maiaaraujo5/gostart/cache/redis/fx"
 	mongo "github.com/maiaaraujo5/gostart/database/mongodb/fx"
 	postgres "github.com/maiaaraujo5/gostart/database/postgres/fx"
 	sentry "github.com/maiaaraujo5/gostart/monitoring/sentry/fx"
 	echo "github.com/maiaaraujo5/gostart/rest/echo/fx"
 	firebase "github.com/maiaaraujo5/gostart/storage/firebase/fx"
+	UDPServer "github.com/maiaaraujo5/gostart/udp/server/fx"
 	"go.uber.org/fx"
 )
 
@@ -39,6 +41,14 @@ func (b providersBuilder) WithRabbitMQ() providersBuilder {
 
 func (b providersBuilder) WithFirebaseStorage() providersBuilder {
 	return builder.Append(b, "Providers", firebase.FirebaseStorageModule()).(providersBuilder)
+}
+
+func (b providersBuilder) WithRedis() providersBuilder {
+	return builder.Append(b, "Providers", fx2.RedisModule()).(providersBuilder)
+}
+
+func (b providersBuilder) WithUDPServer() providersBuilder {
+	return builder.Append(b, "Providers", UDPServer.UDPServerModule()).(providersBuilder)
 }
 
 func (b providersBuilder) WithCustomProvider(provider fx.Option) providersBuilder {
