@@ -1,14 +1,12 @@
 package application
 
 import (
-	"github.com/maiaaraujo5/gostart/broker"
-	"github.com/maiaaraujo5/gostart/rest"
+	"github.com/labstack/echo/v4"
 	"go.uber.org/fx"
 )
 
 type Params struct {
 	fx.In
 
-	Rest   rest.Rest     `optional:"true"`
-	Broker broker.Broker `optional:"true"`
+	Rest *echo.Echo `optional:"true"`
 }

@@ -18,7 +18,7 @@ type rabbitMQ struct {
 	config     *Config
 }
 
-func Connect() (broker.Broker, error) {
+func Connect() (*rabbitMQ, error) {
 	c, err := NewConfig()
 	if err != nil {
 		return nil, err

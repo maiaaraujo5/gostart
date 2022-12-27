@@ -1,6 +1,7 @@
 package echo
 
 import (
+	"context"
 	echoLibrary "github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echo2 "github.com/maiaaraujo5/gostart/monitoring/sentry/echo"
@@ -16,7 +17,9 @@ type echo struct {
 	Echo   *echoLibrary.Echo
 }
 
-func NewEcho(client *echoLibrary.Echo) rest.Rest {
+type Plugin func(ctx context.Context, client *echoLibrary.Echo) error
+
+func NewEcho(ctx context.Context, client *echoLibrary.Echo, plugins ...Plugin) rest.Rest {
 	config, err := config.NewConfig()
 	if err != nil {
 		return nil

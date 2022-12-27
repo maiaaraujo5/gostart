@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-const root = "gostart.mongodb"
+const Root = "gostart.mongodb"
 
 type Config struct {
 	URI               string
@@ -13,8 +13,8 @@ type Config struct {
 }
 
 func defaultConfig() {
-	config.AddDefault(root+".uri", "mongodb://localhost:27017/temp")
-	config.AddDefault(root+".connectiontimeout", 5*time.Second)
+	config.AddDefault(Root+".uri", "mongodb://localhost:27017/temp")
+	config.AddDefault(Root+".connectiontimeout", 5*time.Second)
 }
 
 func NewConfig() (*Config, error) {
@@ -22,7 +22,7 @@ func NewConfig() (*Config, error) {
 
 	defaultConfig()
 
-	if err := config.ReadConfigPath(c, root); err != nil {
+	if err := config.ReadConfigPath(c, Root); err != nil {
 		return nil, err
 	}
 

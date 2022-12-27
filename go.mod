@@ -11,6 +11,7 @@ require (
 	github.com/google/uuid v1.2.0
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/labstack/echo/v4 v4.2.2
+	github.com/labstack/gommon v0.3.0
 	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0
 	github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0 // indirect
 	github.com/rs/zerolog v1.22.0

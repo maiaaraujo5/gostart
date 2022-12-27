@@ -3,15 +3,13 @@ package postgres
 import (
 	"context"
 	"github.com/go-pg/pg"
-	"github.com/maiaaraujo5/gostart/database"
-	"github.com/maiaaraujo5/gostart/database/connection"
 )
 
 type postgres struct {
 	client *pg.DB
 }
 
-func Connect() (database.Database, error) {
+func Connect() (*postgres, error) {
 
 	config, err := NewConfig()
 	if err != nil {
@@ -25,21 +23,11 @@ func Connect() (database.Database, error) {
 		PoolSize: config.PoolSize,
 	}).WithTimeout(config.ConnectionTimeout)
 
-	return postgres{
+	return &postgres{
 		client: client,
 	}, nil
 }
 
-func (p postgres) GetConnection(ctx context.Context) *connection.Connection {
-	return &connection.Connection{
-		Postgres: p.client,
-	}
-}
-
-func (p postgres) Ping(ctx context.Context) error {
-	panic("implement me")
-}
-
-func (p postgres) Disconnect(ctx context.Context) error {
+func (p *postgres) Disconnect(ctx context.Context) error {
 	return p.client.Close()
 }

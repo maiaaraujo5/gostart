@@ -9,7 +9,7 @@ type Config struct {
 }
 
 func defaultConfig() {
-	config.AddDefault(root+".level", "info")
+	config.AddDefault(root+".level", "TRACE")
 }
 
 func newConfig() (*Config, error) {
