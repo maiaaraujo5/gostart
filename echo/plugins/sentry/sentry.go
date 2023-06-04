@@ -51,7 +51,7 @@ func NewSentry(ctx context.Context) echo.Plugin {
 func sentryMiddleware(next echoLibrary.HandlerFunc) echoLibrary.HandlerFunc {
 	return func(c echoLibrary.Context) error {
 		req := c.Request()
-		hub := sentry.CurrentHub()
+		hub := sentry.CurrentHub().Clone()
 		hub.Scope().SetRequest(req)
 
 		hub.AddBreadcrumb(&sentry.Breadcrumb{
@@ -66,11 +66,14 @@ func sentryMiddleware(next echoLibrary.HandlerFunc) echoLibrary.HandlerFunc {
 			Timestamp: time.Now(),
 		}, nil)
 
+		transaction := sentry.StartTransaction(req.Context(), req.URL.Path)
 		err := next(c)
 
 		if err != nil {
 			hub.CaptureException(err)
 		}
+
+		transaction.Finish()
 
 		return err
 	}
