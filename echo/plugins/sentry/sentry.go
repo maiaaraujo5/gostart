@@ -24,6 +24,7 @@ func NewSentry(ctx context.Context) echo.Plugin {
 
 	return func(ctx context.Context, client *echoLibrary.Echo) error {
 		err := sentry.Init(sentry.ClientOptions{
+			EnableTracing:    true,
 			Dsn:              c.Dsn,
 			Debug:            c.Debug,
 			TracesSampleRate: c.TraceSampleRate,
