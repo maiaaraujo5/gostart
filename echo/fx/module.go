@@ -5,6 +5,7 @@ import (
 	echoLibrary "github.com/labstack/echo/v4"
 	"github.com/maiaaraujo5/gostart/echo"
 	"github.com/maiaaraujo5/gostart/echo/plugins/health"
+	"github.com/maiaaraujo5/gostart/echo/plugins/sentry"
 	"go.uber.org/fx"
 )
 
@@ -14,6 +15,7 @@ func EchoModule() fx.Option {
 			func(ctx context.Context) []echo.Plugin {
 				return []echo.Plugin{
 					health.NewHealth(ctx),
+					sentry.NewSentry(ctx),
 				}
 			},
 			func(ctx context.Context, plugins []echo.Plugin) (*echoLibrary.Echo, error) {

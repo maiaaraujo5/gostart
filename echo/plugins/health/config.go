@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	root    = plugins.Root
+	root    = plugins.Root + ".health"
 	enabled = root + ".enabled"
 	route   = root + ".route"
 )

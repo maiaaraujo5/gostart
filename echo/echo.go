@@ -20,6 +20,10 @@ func NewEcho(ctx context.Context, plugins ...Plugin) (*echoLibrary.Echo, error) 
 	cors(echo, config)
 
 	for _, pluginFunc := range plugins {
+		if pluginFunc == nil {
+			continue
+		}
+
 		err := pluginFunc(ctx, echo)
 		if err != nil {
 			logger.Fatal(err.Error())
