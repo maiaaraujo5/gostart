@@ -8,6 +8,7 @@ import (
 	echoLibrary "github.com/labstack/echo/v4"
 	"github.com/maiaaraujo5/gostart/echo"
 	"github.com/maiaaraujo5/gostart/log/logger"
+	"time"
 )
 
 func NewSentry(ctx context.Context) echo.Plugin {
@@ -41,8 +42,37 @@ func NewSentry(ctx context.Context) echo.Plugin {
 			Timeout:         c.Timeout,
 		}))
 
-		sentry.CaptureMessage("It works!")
+		client.Use(sentryMiddleware)
 
 		return nil
 	}
+}
+
+func sentryMiddleware(next echoLibrary.HandlerFunc) echoLibrary.HandlerFunc {
+	return func(c echoLibrary.Context) error {
+		req := c.Request()
+		hub := sentry.CurrentHub().Clone()
+		hub.Scope().SetRequest(req)
+
+		hub.AddBreadcrumb(&sentry.Breadcrumb{
+			Message: "Request",
+			Data: map[string]interface{}{
+				"method":     req.Method,
+				"url":        req.URL,
+				"user-agent": req.UserAgent(),
+				"header":     req.Header,
+			},
+			Level:     sentry.LevelInfo,
+			Timestamp: time.Now(),
+		}, nil)
+
+		err := next(c)
+
+		if err != nil {
+			hub.CaptureException(err)
+		}
+
+		return err
+	}
+
 }
