@@ -67,6 +67,7 @@ func sentryMiddleware(next echoLibrary.HandlerFunc) echoLibrary.HandlerFunc {
 		}, nil)
 
 		transaction := sentry.StartTransaction(req.Context(), req.URL.Path)
+		c.SetRequest(c.Request().WithContext(transaction.Context()))
 		err := next(c)
 
 		if err != nil {
